@@ -1,5 +1,5 @@
 
-###full year or scratch off 
+###full year scratch off 
 
 for general availability
 
