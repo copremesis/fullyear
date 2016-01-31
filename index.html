@@ -1,0 +1,101 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <!--
+    <link href="http://threedubmedia.com/inc/img/favicon.ico" rel="shortcut icon" />
+    <script src="http://threedubmedia.com/inc/js/jquery-1.7.2.js"></script>
+    <script src="http://threedubmedia.com/inc/js/jquery.event.drag-2.2.js"></script>
+    <script src="http://threedubmedia.com/inc/js/jquery.event.drag.live-2.2.js"></script>
+    <script src="http://threedubmedia.com/inc/js/jquery.event.drop-2.2.js"></script>
+    <script src="http://threedubmedia.com/inc/js/jquery.event.drop.live-2.2.js"></script>
+    <script src="http://threedubmedia.com/inc/js/excanvas.min.js"></script>
+    -->
+    <link href="http://st4g1ng.roverpass.com/favicon.ico" rel="shortcut icon" />
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/jquery.event.drag-2.2.js"></script>
+    <script src="js/jquery.event.drag.live-2.2.js"></script>
+    <script src="js/jquery.event.drop-2.2.js"></script>
+    <script src="js/jquery.event.drop.live-2.2.js"></script>
+    <script src="js/excanvas.min.js"></script>
+    <script src="tabular.js"></script>
+    <script src="cal.js"></script>
+    <script src="ajax_store.js"></script>
+    <script src="fullyear.js"></script>
+    <link type="text/css" href="fullyear.css" rel="stylesheet" />
+    <title>General Availability</title>
+  </head>
+  <body class=bodycontainer>
+    <div class="fixed"></div>
+    <div class="feedback">Availabilty Updated.</div>
+    <div class="calendar"></div>
+    <!--
+    <input class='year' type=number value=2015 />
+    -->
+  </body>
+
+  <script>
+    //load setting most likely from AJAX
+    //using localStorage as proof of concept
+    $(document).ready(function() {
+
+      //localStorage.general_availability = localStorage.general_availability || "[]";
+
+
+
+      //console.log(search);
+
+
+      (new AjaxStore()).load(function() {
+
+        //grossly redundant yet determining if settings apply through each year 
+        //essentially proves this is a one time set for life 
+
+        document.build_calendar = function() {
+          var cal = (new Cal()).entire_year((new Date()).getFullYear());
+          //localStorage.general_availability = "[]"
+          //build the full year calendar
+          $('.calendar').html('');
+          cal.map(function(mo) {
+            $('.calendar').append((new Table(mo, {klass: 'month table'})).html_table());
+          });
+
+          //lable the months
+          $('.month thead').each(function(i, e ) {
+            var months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+            $(e).prepend(['<tr><th colspan=7>', months[i],'</th></tr>'].join(''));
+          });
+
+          $('td').each(function(i, e) {
+            if($(e).text().match(/\d+/)) $(e).addClass('drop');
+          });
+          $('.drop')
+            .drop("start",function(){
+              $( this ).addClass("active");
+            })
+            .drop(function( ev, dd ){
+              $( this ).toggleClass("dropped");
+            })
+            .drop("end",function(){
+              $( this ).removeClass("active");
+            });
+
+          $.drop({ multi: true });	
+
+          $('.drop').on('click', function()  {
+              $( this ).toggleClass("dropped");
+              document.compute_selected_dates();
+          });
+        }
+
+      });
+      /*
+      $('.year').on('change', function() {
+        document.build_calendar();
+        (new AjaxStore()).load(function() { });
+      });
+      */
+    });
+
+  </script>
+</html>
