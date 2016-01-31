@@ -55,7 +55,7 @@ jQuery(function($){
     //localStorage.general_availability = JSON.stringify(setting);
     //for actual application ajax is required
     //
-    (new AjaxStore()).update(setting);
+  //  (new AjaxStore()).update(setting);
     
     var objDiv = $(".fixed")[0];
     objDiv.scrollTop = objDiv.scrollHeight;

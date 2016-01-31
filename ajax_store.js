@@ -6,7 +6,8 @@ var AjaxStore = function() {
     return $.extend(obj, o);
   }, {});
 
-  this.host = ['/admin/blackouts/', search.access_key].join(''); 
+  //this.host = ['/admin/blackouts/', search.access_key].join(''); 
+  this.host = '';
 
   this.load = function(callback) {
     var callback = callback || function() {};
